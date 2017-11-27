@@ -77,9 +77,15 @@
       /*
        * As escalas
        */
-      var x = d3.scaleBand(); // Configure essa escala com domain, range e padding
+      var x = d3.scaleBand()
+        .domain(['A', 'B', 'C', 'D', 'E', 'F', 'G'])
+        .range([0, 400])
+        .paddingInner(0.25)
+        .paddingOuter(0.4); // Configure essa escala com domain, range e padding
 
-      var y = d3.scaleLinear() // Configure essa escala com domain e range
+      var y = d3.scaleLinear()
+        .domain([100, 0])
+        .range([0, alturaVis]); // Configure essa escala com domain e range
                                // Lembre que uma escala pode converter de 1..10 -> 100..1
 
       // === ATÉ DAQUI ===
@@ -110,7 +116,7 @@
 
       grafico.append("text")
         .attr("transform", "translate(-30," + (alturaVis + margin.top)/2 + ") rotate(-90)")
-        .text("Frequencia");
+        .text("Frequência");
     </script>
   </body>
 </html>

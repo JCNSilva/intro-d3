@@ -20,6 +20,10 @@
         fill: steelblue;
       }
 
+      .mychart rect:hover {
+        fill: blue;
+      }
+
       .mychart text {
         fill: white;
         font: 10px sans-serif;
@@ -49,17 +53,25 @@
        * (Nem pense em fazer hardcoded :)).
        */
 
-       var allocate = function(d, i) {
-         
-       }
+       var getY = function(d, i) {
+           return i * 25;
+       };
+
+       var getWidth = function(d, i) {
+           return d;
+       };
+
+       var getText = function(d, i){
+           return d;
+       };
 
       svg.selectAll('rect')
           .data(dados)
           .enter()
             .append('rect')
               .attr('x', 0) // A função com dois parâmetros pode entrar aqui
-              .attr('y', 0) // e aqui
-              .attr('width', 30)
+              .attr('y', getY) // e aqui
+              .attr('width', getWidth)
               .attr('height', 20);
 
       /* Mais dicas :
