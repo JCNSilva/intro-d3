@@ -9,9 +9,20 @@
 </head>
 
 <body>
+    <!--read more -->
   <div class="container">
     <div class="row">
-      <h2>Analisando o Volume Percentual de Boqueirão</h2>
+      <h1>Analisando o Volume Percentual de Boqueirão</h1>
+      <p>
+          Como parte dos trabalhos do laboratório 2, foi elaborada a seguinte
+          visualização utilizando d3.js.
+      </p>
+      <p>
+          A visualização mostra o 10-percentil e o 90-percentil do volume percentual
+          do açude Epitácio Pessoa a cada mês do ano. A cor azul indica que o mês
+          está dentro da estação chuvosa do semiárido, enquanto que a cor marrom
+          indica que o mês está na estação de estiagem.
+      </p>
     </div>
     <div class="row mychart" id="chart">
     </div>
@@ -30,6 +41,10 @@
       font: 12px sans-serif;
       text-anchor: left;
     }
+
+    .mychart circle:hover  {
+         fill-opacity: 1;
+    }
   </style>
 
   <script type="text/javascript">
@@ -37,11 +52,11 @@
 
     function draw(dados) {
 
-        var dados = dados.map((d, i) => d.tipo_mes = (d.mes >= 1 && d.mes <= 6 ? "chuvoso" : "seco"));
+        dados.map((d, i) => d.tipo_mes = (d.mes >= 1 && d.mes <= 6 ? "chuvoso" : "seco"));
 
       // definicoes de altura e largura do svg e da vis dentro
       var alturaSVG = 400, larguraSVG = 900;
-      var	margin = {top: 10, right: 20, bottom:30, left: 45}, // para descolar a vis das bordas do grafico
+      var	margin = {top: 10, right: 20, bottom:45, left: 45}, // para descolar a vis das bordas do grafico
           larguraVis = larguraSVG - margin.left - margin.right,
           alturaVis = alturaSVG - margin.top - margin.bottom;
 
@@ -68,21 +83,20 @@
             .range([alturaVis, 25])
             .clamp(true);
 
-        var colorScale = d3.scaleBand()
-            .domain([1, 2])
-            .range(["blue", "brown"]);
+        var colorScale = d3.scaleOrdinal(d3.schemeCategory10);
 
         /*
          * As marcas
          */
         grafico.selectAll('g')
-                .data()
+                .data(dados)
                 .enter()
                   .append('circle')
                     .attr('cx', d => xScale(d.noventa_percentil))
                     .attr('cy', d => yScale(d.dez_percentil))
-                    .attr('r', '3')
-                    .attr('fill', d => colorScale(d.tipo_mes));
+                    .attr('r', '5')
+                    .attr('fill', d => colorScale(d.tipo_mes))
+                    .attr('fill-opacity', '0.3');
 
         /*
          * Os eixos
@@ -99,6 +113,10 @@
         grafico.append("text")
           .attr("transform", "translate(-30," + (alturaVis + margin.top)/2 + ") rotate(-90)")
           .text("10-percentil");
+
+          grafico.append("text")
+          .attr("transform", "translate(250, " + (alturaVis + 30) + ")")
+          .text("90-percentil");
     };
 
     d3.csv('dados/boqueirao-por-mes.csv', function(dados) {
