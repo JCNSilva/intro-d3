@@ -44,10 +44,6 @@
     </div>
 
     <style>
-      .mychart circle {
-        fill: steelblue;
-      }
-
       .mychart text {
         font: 10px sans-serif;
         text-anchor: middle;
@@ -61,6 +57,7 @@
 
       function criaVisGeral(){
         d3.csv("https://raw.githubusercontent.com/nazareno/tamanhos-da-ufcg/master/ufcg_uas_com_matriculas.csv", data => (desenhaVis(data)));
+
         function desenhaVis(dadosLidos){
           dadosLidos = dadosLidos.filter(d => d.CAMPUS == 1)
 
@@ -97,6 +94,7 @@
           deptos
             .append("circle")
             .attr("r", circuloInicial)
+            .attr("fill", "#a50f15")
 
           deptos
             .append("text")
@@ -139,10 +137,16 @@
             var radiusScale = d3.scaleLinear()
                             .domain([ 0, maxValue ])
                             .range([ 2, 25 ])
+
+            var colorScale = d3.scaleQuantize()
+                                .domain([0, maxValue])
+                                .range(colorbrewer.Reds[5])
+
             d3.selectAll("g.depto")
               .select("circle")
-              //.transition().duration(700) // descomente aqui para testar
+              .transition().duration(700)
               .attr("r", d => radiusScale(d[dimensao]))
+              .attr("fill", d => colorScale(d[dimensao]))
           }
         }
       }
